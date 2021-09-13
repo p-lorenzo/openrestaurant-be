@@ -12,7 +12,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="app_default")
      */
-    public function default()
+    public function index()
     {
         return $this->render("base.html.twig");
     }

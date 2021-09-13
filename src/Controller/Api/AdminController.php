@@ -7,17 +7,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @Route("/public", name="app_api_public")
+ * @Route("/admin", name="app_api_admin")
  */
-class PublicController extends AbstractController
+class AdminController extends AbstractController
 {
     /**
-     * @Route("/", name="app_api_public_default", methods={"GET"})
+     * @Route("/test", name="app_api_admin_test", methods={"GET"})
      */
     public function default(): JsonResponse
     {
         return $this->json([
-            "message" => "Hello world!"
+            "message" => "Autenticazione riuscita"
         ]);
     }
 }
