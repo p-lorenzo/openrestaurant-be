@@ -113,4 +113,12 @@ class MenuSection
 
         return $this;
     }
+
+    public static function newMenuSection(string $title, int $sorting): MenuSection
+    {
+        $section = new self();
+        $section->setTitle($title);
+        $section->setSorting($sorting);
+        return $section;
+    }
 }

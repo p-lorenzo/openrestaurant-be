@@ -80,4 +80,11 @@ class Menu
 
         return $this;
     }
+
+    public function activate(): self
+    {
+        $this->setActive(true);
+        
+        return $this;
+    }
 }

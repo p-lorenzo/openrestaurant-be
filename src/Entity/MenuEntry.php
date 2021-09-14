@@ -106,4 +106,14 @@ class MenuEntry
 
         return $this;
     }
+
+    public static function withData(string $name, float $price, int $quantity, string $description = null): MenuEntry
+    {
+        $menuEntry = new self();
+        $menuEntry->setName($name);
+        $menuEntry->setDescription($description);
+        $menuEntry->setPrice($price);
+        $menuEntry->setQuantity($quantity);
+        return $menuEntry;
+    }
 }
