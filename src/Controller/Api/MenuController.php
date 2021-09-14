@@ -6,9 +6,10 @@ use App\Repository\MenuRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route("/menu", name="app_api_public")
+ * @Route("/menu", name="app_api_menu")
  */
 class MenuController extends AbstractController
 {
@@ -24,6 +25,6 @@ class MenuController extends AbstractController
      */
     public function active(): JsonResponse
     {
-        return $this->json($this->menuRepository->findActive());
+        return $this->json($this->menuRepository->findActive(), Response::HTTP_OK, [], ['groups' => 'public']);
     }
 }
