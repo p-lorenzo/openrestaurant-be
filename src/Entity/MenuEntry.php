@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MenuEntryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=MenuEntryRepository::class)
@@ -19,21 +20,25 @@ class MenuEntry
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("public")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("public")
      */
     private $description;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @Groups("public")
      */
     private $price;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("public")
      */
     private $quantity;
 

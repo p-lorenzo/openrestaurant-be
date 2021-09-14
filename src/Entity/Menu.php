@@ -6,6 +6,7 @@ use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=MenuRepository::class)
@@ -21,6 +22,7 @@ class Menu
 
     /**
      * @ORM\OneToMany(targetEntity=MenuSection::class, mappedBy="menu")
+     * @Groups("public")
      */
     private $sections;
 
