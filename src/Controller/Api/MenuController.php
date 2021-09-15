@@ -27,4 +27,103 @@ class MenuController extends AbstractController
     {
         return $this->json($this->menuRepository->findActive(), Response::HTTP_OK, [], ['groups' => 'public']);
     }
+    
+    /**
+     * @Route("/example", name="app_api_menu_example", methods={"GET"})
+     */
+    public function example(): JsonResponse
+    {
+        return $this->json(array (
+            'sections' => 
+            array (
+              0 => 
+              array (
+                'title' => 'Antipasti',
+                'sorting' => 0,
+                'entries' => 
+                array (
+                  0 => 
+                  array (
+                    'name' => 'apetizer0',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 6,
+                  ),
+                  1 => 
+                  array (
+                    'name' => 'apetizer1',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 6,
+                  ),
+                  2 => 
+                  array (
+                    'name' => 'apetizer2',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 20,
+                  ),
+                ),
+              ),
+              1 => 
+              array (
+                'title' => 'Primi Piatti',
+                'sorting' => 1,
+                'entries' => 
+                array (
+                  0 => 
+                  array (
+                    'name' => 'mainCourse0',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 10,
+                  ),
+                  1 => 
+                  array (
+                    'name' => 'mainCourse1',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 15,
+                  ),
+                  2 => 
+                  array (
+                    'name' => 'mainCourse2',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 17,
+                  ),
+                ),
+              ),
+              2 => 
+              array (
+                'title' => 'Secondi Piatti',
+                'sorting' => 2,
+                'entries' => 
+                array (
+                  0 => 
+                  array (
+                    'name' => 'secondDish0',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 20,
+                  ),
+                  1 => 
+                  array (
+                    'name' => 'secondDish1',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 11,
+                  ),
+                  2 => 
+                  array (
+                    'name' => 'secondDish2',
+                    'description' => NULL,
+                    'price' => '10.50',
+                    'quantity' => 12,
+                  ),
+                ),
+              ),
+            ),
+          ));
+    }
 }
