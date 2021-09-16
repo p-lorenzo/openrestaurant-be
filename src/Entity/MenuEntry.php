@@ -16,6 +16,7 @@ class MenuEntry
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
+     * @Groups("public")
      */
     private $id;
 
