@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MenuEntryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -11,10 +12,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class MenuEntry
 {
+
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
      */
     private $id;
 
@@ -47,7 +48,12 @@ class MenuEntry
      */
     private $menuSection;
 
-    public function getId(): ?int
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+    }
+
+    public function getId(): ?string
     {
         return $this->id;
     }
