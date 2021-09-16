@@ -31,7 +31,7 @@ class MenuEntryController extends AbstractController
      */
     public function index(): JsonResponse
     {
-        return $this->json($this->menuEntryRepository->findAll());
+        return $this->json($this->menuEntryRepository->findAll(), Response::HTTP_OK, [], ['groups' => 'public']);
     }
 
     /**
