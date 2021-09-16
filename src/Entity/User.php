@@ -100,6 +100,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function giveAdminPrivileges(): self
+    {
+        $this->roles[] = 'ROLE_ADMIN';
+
+        return $this;
+    }
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
