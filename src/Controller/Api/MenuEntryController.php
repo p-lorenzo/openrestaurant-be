@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\MenuEntry;
 use App\Repository\MenuEntryRepository;
+use App\Repository\MenuSectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,11 +20,13 @@ class MenuEntryController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
     private MenuEntryRepository $menuEntryRepository;
+    private MenuSectionRepository $menuSectionRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MenuEntryRepository $menuEntryRepository)
+    public function __construct(EntityManagerInterface $entityManager, MenuEntryRepository $menuEntryRepository, MenuSectionRepository $menuSectionRepository)
     {
         $this->entityManager = $entityManager;
         $this->menuEntryRepository = $menuEntryRepository;
+        $this->menuSectionRepository = $menuSectionRepository;
     }
 
     /**
@@ -46,6 +49,7 @@ class MenuEntryController extends AbstractController
         $description = $data['description'];
         $price = $data['price'];
         $quantity = $data['quantity'];
+        $menuSection = $this->menuSectionRepository->findOneBy(['id' => $data['section']]);
 
         if (empty($name) || empty($price) || empty($quantity)) {
             throw new NotFoundHttpException('Expecting mandatory parameters!');
@@ -54,7 +58,8 @@ class MenuEntryController extends AbstractController
         $menuEntry->setName($name)
             ->setPrice($price)
             ->setQuantity($quantity)
-            ->setDescription($description);
+            ->setDescription($description)
+            ->setMenuSection($menuSection);
         $this->entityManager->persist($menuEntry);
         $this->entityManager->flush();
 
