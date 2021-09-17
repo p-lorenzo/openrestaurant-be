@@ -45,15 +45,15 @@ class MenuEntryController extends AbstractController
         $menuEntry = new MenuEntry();
         $data = json_decode($request->getContent(), true);
 
+        if (null != $data['name'] || null != $data['description'] || null != $data['section'] || null != $data['price'] || null != $data['quantity']) {
+            return $this->json(['message' => 'Expecting mandatory parameters!'], Response::HTTP_BAD_REQUEST);
+        }
+
         $name = $data['name'];
         $description = $data['description'];
         $price = $data['price'];
         $quantity = $data['quantity'];
         $menuSection = $this->menuSectionRepository->findOneBy(['id' => $data['section']]);
-
-        if (empty($name) || empty($price) || empty($quantity)) {
-            throw new NotFoundHttpException('Expecting mandatory parameters!');
-        }
 
         $menuEntry->setName($name)
             ->setPrice($price)
@@ -73,19 +73,21 @@ class MenuEntryController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        if (null != $data['name'] || null != $data['description'] || null != $data['section'] || null != $data['price'] || null != $data['quantity']) {
+            return $this->json(['message' => 'Expecting mandatory parameters!'], Response::HTTP_BAD_REQUEST);
+        }
+
         $name = $data['name'];
         $description = $data['description'];
         $price = $data['price'];
         $quantity = $data['quantity'];
-
-        if (empty($name) || empty($price) || empty($quantity)) {
-            throw new NotFoundHttpException('Expecting mandatory parameters!');
-        }
+        $menuSection = $this->menuSectionRepository->findOneBy(['id' => $data['section']]);
 
         $menuEntry->setName($name)
             ->setPrice($price)
             ->setQuantity($quantity)
-            ->setDescription($description);
+            ->setDescription($description)
+            ->setMenuSection($menuSection);
         $this->entityManager->persist($menuEntry);
         $this->entityManager->flush();
 
