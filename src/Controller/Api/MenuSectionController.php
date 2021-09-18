@@ -29,7 +29,7 @@ class MenuSectionController extends AbstractController
      */
     public function index(): JsonResponse
     {
-        return $this->json($this->menuSectionRepository->findAll(), Response::HTTP_OK, [], ['groups' => 'public']);
+        return $this->json($this->menuSectionRepository->findBy([], ['sorting' => 'ASC']), Response::HTTP_OK, [], ['groups' => 'public']);
     }
 
     /**
