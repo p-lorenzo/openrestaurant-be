@@ -19,7 +19,7 @@ class MenuRepository extends ServiceEntityRepository
         parent::__construct($registry, Menu::class);
     }
 
-    public function findActive(): Menu
+    public function findActive(): ?Menu
     {
         return $this->findOneBy(['active' => true]);
     }
