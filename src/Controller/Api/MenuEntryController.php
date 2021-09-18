@@ -111,4 +111,12 @@ class MenuEntryController extends AbstractController
 
         return new JsonResponse(['status' => 'Pietanza rimossa!'], Response::HTTP_NO_CONTENT);
     }
+
+    /**
+     * @Route("/{id}", name="app_api_menuentry_detail", methods={"GET"})
+     */
+    public function detail(MenuEntry $menuEntry)
+    {
+        return $this->json($menuEntry, Response::HTTP_OK, [], ['groups' => 'public']);
+    }
 }
