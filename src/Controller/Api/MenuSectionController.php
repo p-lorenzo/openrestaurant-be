@@ -6,6 +6,7 @@ use App\Entity\MenuSection;
 use App\Form\MenuSectionType;
 use App\Repository\MenuSectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +45,11 @@ class MenuSectionController extends AbstractController
             return $this->json(["message" => "Empty data"], Response::HTTP_BAD_REQUEST);
         }
 
-        $form = $this->createForm(MenuSectionType::class, $menuSection)->submit($data);
+        try {
+            $form = $this->createForm(MenuSectionType::class, $menuSection)->submit($data);
+        } catch (Exception $e) {
+            return $this->json($e->getMessage(), $e->getCode());
+        }
         if (!$form->isValid()) {
             $errors = [];
             foreach ($form->getErrors(true) as $error) {
@@ -54,14 +59,10 @@ class MenuSectionController extends AbstractController
             return $this->json(implode(" - ", $errors), 422);
         }
 
-        try {
-            $this->entityManager->persist($menuSection);
-            $this->entityManager->flush();
+        $this->entityManager->persist($menuSection);
+        $this->entityManager->flush();
 
-            return new JsonResponse(['status' => 'Sezione aggiornata!'], Response::HTTP_CREATED);
-        } catch (\Exception $ex) {
-            return $this->json(["message" => "Inserimento fallito " . $ex->getMessage()], 500);
-        }
+        return new JsonResponse(['status' => 'Sezione aggiornata!'], Response::HTTP_CREATED);
     }
 
     /**
@@ -75,7 +76,11 @@ class MenuSectionController extends AbstractController
             return $this->json(["message" => "Empty data"], Response::HTTP_BAD_REQUEST);
         }
 
-        $form = $this->createForm(MenuSectionType::class, $menuSection)->submit($data);
+        try {
+            $form = $this->createForm(MenuSectionType::class, $menuSection)->submit($data);
+        } catch (Exception $e) {
+            return $this->json($e->getMessage(), $e->getCode());
+        }
         if (!$form->isValid()) {
             $errors = [];
             foreach ($form->getErrors(true) as $error) {
@@ -85,14 +90,10 @@ class MenuSectionController extends AbstractController
             return $this->json(implode(" - ", $errors), 422);
         }
 
-        try {
-            $this->entityManager->persist($menuSection);
-            $this->entityManager->flush();
+        $this->entityManager->persist($menuSection);
+        $this->entityManager->flush();
 
-            return new JsonResponse(['status' => 'Sezione aggiornata!'], Response::HTTP_CREATED);
-        } catch (\Exception $ex) {
-            return $this->json(["message" => "Inserimento fallito " . $ex->getMessage()], 500);
-        }
+        return new JsonResponse(['status' => 'Sezione aggiornata!'], Response::HTTP_CREATED);
     }
 
     /**
