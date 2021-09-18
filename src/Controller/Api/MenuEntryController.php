@@ -45,7 +45,7 @@ class MenuEntryController extends AbstractController
         $menuEntry = new MenuEntry();
         $data = json_decode($request->getContent(), true);
 
-        if (null != $data['name'] || null != $data['description'] || null != $data['section'] || null != $data['price'] || null != $data['quantity']) {
+        if (null == $data['name'] || null == $data['description'] || null == $data['section'] || null == $data['price'] || null == $data['quantity']) {
             return $this->json(['message' => 'Expecting mandatory parameters!'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -73,7 +73,7 @@ class MenuEntryController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (null != $data['name'] || null != $data['description'] || null != $data['section'] || null != $data['price'] || null != $data['quantity']) {
+        if (null == $data['name'] || null == $data['description'] || null == $data['section'] || null == $data['price'] || null == $data['quantity']) {
             return $this->json(['message' => 'Expecting mandatory parameters!'], Response::HTTP_BAD_REQUEST);
         }
 
