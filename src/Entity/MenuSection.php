@@ -18,12 +18,14 @@ class MenuSection
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @Groups("public")
+     * @Groups("details")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("public")
+     * @Groups("details")
      */
     private $title;
 

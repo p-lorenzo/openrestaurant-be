@@ -117,6 +117,6 @@ class MenuEntryController extends AbstractController
      */
     public function detail(MenuEntry $menuEntry)
     {
-        return $this->json($menuEntry, Response::HTTP_OK, [], ['groups' => 'public']);
+        return $this->json($menuEntry, Response::HTTP_OK, [], ['groups' => 'details']);
     }
 }

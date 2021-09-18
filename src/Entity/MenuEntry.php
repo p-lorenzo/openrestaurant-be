@@ -17,35 +17,41 @@ class MenuEntry
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @Groups("public")
+     * @Groups("details")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("public")
+     * @Groups("details")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups("public")
+     * @Groups("details")
      */
     private $description;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      * @Groups("public")
+     * @Groups("details")
      */
     private $price;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups("public")
+     * @Groups("details")
      */
     private $quantity;
 
     /**
      * @ORM\ManyToOne(targetEntity=MenuSection::class, inversedBy="MenuEntry")
+     * @Groups("details")
      */
     private $menuSection;
 
