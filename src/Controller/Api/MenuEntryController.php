@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\MenuEntry;
+use App\Form\MenuEntryType;
 use App\Repository\MenuEntryRepository;
 use App\Repository\MenuSectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,26 +45,29 @@ class MenuEntryController extends AbstractController
     {
         $menuEntry = new MenuEntry();
         $data = json_decode($request->getContent(), true);
-
-        if (null == $data['name'] || null == $data['description'] || null == $data['section'] || null == $data['price'] || null == $data['quantity']) {
-            return $this->json(['message' => 'Expecting mandatory parameters!'], Response::HTTP_BAD_REQUEST);
+        if (empty($data)) {
+            return $this->json(["message" => "Empty data"], Response::HTTP_BAD_REQUEST);
         }
 
-        $name = $data['name'];
-        $description = $data['description'];
-        $price = $data['price'];
-        $quantity = $data['quantity'];
-        $menuSection = $this->menuSectionRepository->findOneBy(['id' => $data['section']]);
+        $form = $this->createForm(MenuEntryType::class, $menuEntry)->submit($data);
+        if (!$form->isValid()) {
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getOrigin()->getName() . ": " . $error->getMessage();
+            }
 
-        $menuEntry->setName($name)
-            ->setPrice($price)
-            ->setQuantity($quantity)
-            ->setDescription($description)
-            ->setMenuSection($menuSection);
-        $this->entityManager->persist($menuEntry);
-        $this->entityManager->flush();
+            return $this->json(implode(" - ", $errors), 422);
+        }
 
-        return new JsonResponse(['status' => 'Pietanza aggiunta!'], Response::HTTP_CREATED);
+        try {
+            $menuEntry->setMenuSection($this->menuSectionRepository->findOneBy(['id' => $form['menuSectionId']->getData()]));
+            $this->entityManager->persist($menuEntry);
+            $this->entityManager->flush();
+
+            return new JsonResponse(['status' => 'Pietanza aggiunta!'], Response::HTTP_CREATED);
+        } catch (\Exception $ex) {
+            return $this->json(["message" => "Inserimento fallito " . $ex->getMessage()], 500);
+        }
     }
 
     /**
@@ -72,26 +76,29 @@ class MenuEntryController extends AbstractController
     public function update(MenuEntry $menuEntry, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
-        if (null == $data['name'] || null == $data['description'] || null == $data['section'] || null == $data['price'] || null == $data['quantity']) {
-            return $this->json(['message' => 'Expecting mandatory parameters!'], Response::HTTP_BAD_REQUEST);
+        if (empty($data)) {
+            return $this->json(["message" => "Empty data"], Response::HTTP_BAD_REQUEST);
         }
 
-        $name = $data['name'];
-        $description = $data['description'];
-        $price = $data['price'];
-        $quantity = $data['quantity'];
-        $menuSection = $this->menuSectionRepository->findOneBy(['id' => $data['section']]);
+        $form = $this->createForm(MenuEntryType::class, $menuEntry)->submit($data);
+        if (!$form->isValid()) {
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getOrigin()->getName() . ": " . $error->getMessage();
+            }
 
-        $menuEntry->setName($name)
-            ->setPrice($price)
-            ->setQuantity($quantity)
-            ->setDescription($description)
-            ->setMenuSection($menuSection);
-        $this->entityManager->persist($menuEntry);
-        $this->entityManager->flush();
+            return $this->json(implode(" - ", $errors), 422);
+        }
 
-        return new JsonResponse(['status' => 'Pietanza aggiornata!'], Response::HTTP_CREATED);
+        try {
+            $menuEntry->setMenuSection($this->menuSectionRepository->findOneBy(['id' => $form['menuSectionId']->getData()]));
+            $this->entityManager->persist($menuEntry);
+            $this->entityManager->flush();
+
+            return new JsonResponse(['status' => 'Pietanza aggiornata!'], Response::HTTP_CREATED);
+        } catch (\Exception $ex) {
+            return $this->json(["message" => "Inserimento fallito " . $ex->getMessage()], 500);
+        }
     }
 
     /**

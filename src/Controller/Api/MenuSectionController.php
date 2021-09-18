@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\MenuSection;
+use App\Form\MenuSectionType;
 use App\Repository\MenuSectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,52 +35,64 @@ class MenuSectionController extends AbstractController
     }
 
     /**
-     * @Route("/add", name="app_api_menusection_add", methods={"POST"})
-     */
-    // public function item(Request $request): JsonResponse
-    // {
-    //     $menuSection = new MenuSection();
-    //     $data = json_decode($request->getContent(), true);
-
-    //     $name = $data['name'];
-    //     $description = $data['description'];
-    //     $price = $data['price'];
-    //     $quantity = $data['quantity'];
-
-    //     if (empty($name) || empty($price) || empty($quantity)) {
-    //         throw new NotFoundHttpException('Expecting mandatory parameters!');
-    //     }
-
-    //     $menuSection->setName($name)
-    //         ->setPrice($price)
-    //         ->setQuantity($quantity)
-    //         ->setDescription($description);
-    //     $this->entityManager->persist($menuSection);
-    //     $this->entityManager->flush();
-
-    //     return new JsonResponse(['status' => 'Sezione menu aggiunta!'], Response::HTTP_CREATED);
-    // }
-
-    /**
      * @Route("/update/{id}", name="app_api_menusection_update", methods={"POST"})
      */
     public function update(MenuSection $menuSection, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
-        if (null == $data['title']) {
-            return $this->json(['message' => 'Expecting mandatory parameters!'], Response::HTTP_BAD_REQUEST);
+        if (empty($data)) {
+            return $this->json(["message" => "Empty data"], Response::HTTP_BAD_REQUEST);
         }
 
-        $title = $data['title'];
-        $sorting = $data['sorting'];
+        $form = $this->createForm(MenuSectionType::class, $menuSection)->submit($data);
+        if (!$form->isValid()) {
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getOrigin()->getName() . ": " . $error->getMessage();
+            }
 
-        $menuSection->setTitle($title)
-            ->setSorting($sorting);
-        $this->entityManager->persist($menuSection);
-        $this->entityManager->flush();
+            return $this->json(implode(" - ", $errors), 422);
+        }
 
-        return new JsonResponse(['status' => 'Sezione aggiornata!'], Response::HTTP_OK);
+        try {
+            $this->entityManager->persist($menuSection);
+            $this->entityManager->flush();
+
+            return new JsonResponse(['status' => 'Sezione aggiornata!'], Response::HTTP_CREATED);
+        } catch (\Exception $ex) {
+            return $this->json(["message" => "Inserimento fallito " . $ex->getMessage()], 500);
+        }
+    }
+
+    /**
+     * @Route("/add", name="app_api_menusection_item", methods={"POST"})
+     */
+    public function item(Request $request): JsonResponse
+    {
+        $menuSection = new MenuSection();
+        $data = json_decode($request->getContent(), true);
+        if (empty($data)) {
+            return $this->json(["message" => "Empty data"], Response::HTTP_BAD_REQUEST);
+        }
+
+        $form = $this->createForm(MenuSectionType::class, $menuSection)->submit($data);
+        if (!$form->isValid()) {
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getOrigin()->getName() . ": " . $error->getMessage();
+            }
+
+            return $this->json(implode(" - ", $errors), 422);
+        }
+
+        try {
+            $this->entityManager->persist($menuSection);
+            $this->entityManager->flush();
+
+            return new JsonResponse(['status' => 'Sezione aggiornata!'], Response::HTTP_CREATED);
+        } catch (\Exception $ex) {
+            return $this->json(["message" => "Inserimento fallito " . $ex->getMessage()], 500);
+        }
     }
 
     /**
